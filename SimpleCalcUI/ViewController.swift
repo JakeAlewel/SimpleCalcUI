@@ -10,8 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    let operatorInputs = ["+", "-", "*", "/", "%"];
-    let functionInputs = ["Cnt", "Avg", "Fact"];
+
     
     @IBOutlet weak var mainTextView: UITextView!;
     var shouldClearOnNextTap : Bool = false;
@@ -23,7 +22,7 @@ class ViewController: UIViewController {
         mainTextView.text = newText;
     }
     
-    func appendFunctionString(stringToAppend: String) {
+    func appendOperationString(stringToAppend: String) {
         let newText = "\(mainTextView.text!) \(stringToAppend) ";
         mainTextView.text = newText;
     }
@@ -35,45 +34,29 @@ class ViewController: UIViewController {
     }
     
     @IBAction func touchedOperatorButton(sender: UIButton) {
-        appendFunctionString(sender.titleLabel!.text!);
+        let currentString = mainTextView.text;
+        if hasOperatorInInput(currentString) || hasFunctionInInput(currentString) {
+            return;
+        }
+        appendOperationString(sender.titleLabel!.text!);
     }
     
     
     @IBAction func touchedFunctionButton(sender: UIButton) {
-        appendFunctionString(sender.titleLabel!.text!);
+        appendOperationString(sender.titleLabel!.text!);
     }
     
     
     @IBAction func touchedEqualsButton(sender: UIButton) {
-        let result = solveEquation();
-        appendFunctionString(sender.titleLabel!.text!);
+        let currentString = mainTextView.text;
+        let result = solveEquation(currentString);
+        appendOperationString(sender.titleLabel!.text!);
         appendNumberString(result);
     }
     
     // Business Logic
     
-    func solveEquation() -> String {
-        let components = inputComponents();
-        print(components);
-        return "Huuzahhh"
-    }
     
-    func hasOperatorInInput() -> Bool {
-        let components = inputComponents();
-        for string in components {
-            for operatorString in operatorInputs {
-                if string.containsString(operatorString) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    
-    func inputComponents() -> [String] {
-        let string = mainTextView.text!;
-        return string.componentsSeparatedByString(string);
-    }
     
 }
 
