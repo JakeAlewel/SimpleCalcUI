@@ -16,13 +16,12 @@ class ViewController: UIViewController {
     // Update Text View
     
     func appendNumberString(stringToAppend: String) {
-        clearTextIfNeeded();
         let newText = "\(mainTextView.text!)\(stringToAppend)";
         mainTextView.text = newText;
     }
     
     func appendOperationString(stringToAppend: String) {
-        let newText = "\(mainTextView.text!) \(stringToAppend) ";
+        let newText = "\(mainTextView.text!.stringBySingleSpacingAllWhiteSpace()) \(stringToAppend) ";
         mainTextView.text = newText;
     }
     
@@ -36,6 +35,7 @@ class ViewController: UIViewController {
     // IBAction
     
     @IBAction func touchedNumberButton(sender: UIButton) {
+        clearTextIfNeeded();
         let currentString = mainTextView.text;
         if hasFactorialInInput(currentString) {
             return;
@@ -45,8 +45,9 @@ class ViewController: UIViewController {
     }
     
     @IBAction func touchedOperatorButton(sender: UIButton) {
+        clearTextIfNeeded();
         let currentString = mainTextView.text;
-        if hasOperatorInInput(currentString) || hasFunctionInInput(currentString) {
+        if hasNoInputValues(currentString) || hasOperatorInInput(currentString) || hasFunctionInInput(currentString) {
             return;
         }
         
@@ -55,24 +56,36 @@ class ViewController: UIViewController {
     
     
     @IBAction func touchedFunctionButton(sender: UIButton) {
+        clearTextIfNeeded();
         let currentString = mainTextView.text;
-        if hasOperatorInInput(currentString) {
+        if hasNoInputValues(currentString) || hasOperatorInInput(currentString) {
             return;
         }
         
         let newFunctionString = sender.titleLabel!.text!;
-        if functionInInputMatchesNewFunction(currentString, newFunction: newFunctionString) {
+        if canAddNewFunctionToInput(currentString, newFunction: newFunctionString) {
             appendOperationString(newFunctionString);
         }
     }
     
     
     @IBAction func touchedEqualsButton(sender: UIButton) {
+        clearTextIfNeeded();
         let currentString = mainTextView.text;
+        if hasNoInputValues(currentString) {
+            return;
+        }
+        
         let result = solveEquation(currentString);
         appendOperationString(sender.titleLabel!.text!);
         appendNumberString(result);
         shouldClearOnNextTap = true;
+    }
+    
+    // View Lifecycle
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
     }
 
 }

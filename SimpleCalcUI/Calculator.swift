@@ -12,18 +12,54 @@ import Foundation
 
 func solveEquation(input: String) -> String {
     let components = inputComponents(input);
+    if hasFactorialInInput(input) {
+        
+    }
     print(components);
     return "Huuzahhh"
 }
 
-// Verification
+// Verification - Public 
 
-let operatorInputs = ["+", "-", "*", "/", "%"];
-let functionInputs = ["Cnt", "Avg", "Fact"];
+func hasNoInputValues(input: String) -> Bool {
+    return inputComponents(input).count <= 0;
+}
 
 func hasOperatorInInput(input: String) -> Bool {
     let components = inputComponents(input);
-    print(components);
+    return hasOperatorInComponents(components);
+}
+
+func hasFunctionInInput(input: String) -> Bool {
+    let components = inputComponents(input);
+    return hasFunctionInComponents(components);
+}
+
+func hasFactorialInInput(input: String) -> Bool {
+    let components = inputComponents(input);
+    return hasFactorialInComponents(components);
+}
+
+func canAddNewFunctionToInput(input: String, newFunction: String) -> Bool {
+    if hasFunctionInInput(input) {
+        let components = inputComponents(input);
+        let functionAlreadyExistsInInput = functionExistsInComponents(newFunction, components: components);
+        if functionAlreadyExistsInInput {
+            return !newFunction.containsString("Fact");
+        } else {
+            return false;
+        }
+    } else {
+        return true;
+    }
+}
+
+// Verification - Private
+
+private let operatorInputs = ["+", "-", "*", "/", "%"];
+private let functionInputs = ["Cnt", "Avg", "Fact"];
+
+private func hasOperatorInComponents(components: [String]) -> Bool {
     for string in components {
         for operatorString in operatorInputs {
             if string.containsString(operatorString) {
@@ -34,10 +70,18 @@ func hasOperatorInInput(input: String) -> Bool {
     return false;
 }
 
-func hasFunctionInInput(input: String) -> Bool {
-    let components = inputComponents(input);
+private func hasFunctionInComponents(components: [String]) -> Bool {
     for string in components {
         if validFunctionStringFromString(string) != nil {
+            return true;
+        }
+    }
+    return false;
+}
+
+private func hasFactorialInComponents(components: [String]) -> Bool {
+    for string in components {
+        if string.containsString("Fact") {
             return true;
         }
     }
@@ -53,33 +97,25 @@ private func validFunctionStringFromString(inputSubString: String) -> String? {
     return nil;
 }
 
-func functionInInputMatchesNewFunction(input: String, newFunction: String) -> Bool {
-    if hasFunctionInInput(input) {
-        let components = inputComponents(input);
-        for string in components {
-            let inputFunctionString = validFunctionStringFromString(string);
-            if inputFunctionString != nil {
-                if !inputFunctionString!.containsString(newFunction) {
-                    return false;
-                }
+private func functionExistsInComponents(newFunction: String, components: [String]) -> Bool {
+    for string in components {
+        let inputFunctionString = validFunctionStringFromString(string);
+        if inputFunctionString != nil {
+            if !inputFunctionString!.containsString(newFunction) {
+                return false;
             }
         }
-        return true;
-    } else {
-        return true;
     }
+    return true;
 }
 
-func hasFactorialInInput(input: String) -> Bool {
-    let components = inputComponents(input);
-    for string in components {
-        if string.containsString("Fact") {
-            return true;
-        }
-    }
-    return false;
-}
+// Utility - Private
 
-func inputComponents(input: String) -> [String] {
-    return input.componentsSeparatedByString(" ");
+private func inputComponents(input: String) -> [String] {
+    let trimmedInput = input.stringBySingleSpacingAllWhiteSpace();
+    if trimmedInput.isEmpty {
+        return [];
+    }
+    
+    return trimmedInput.componentsSeparatedByString(" ");
 }
