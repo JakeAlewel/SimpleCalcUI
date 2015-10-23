@@ -37,13 +37,37 @@ func hasOperatorInInput(input: String) -> Bool {
 func hasFunctionInInput(input: String) -> Bool {
     let components = inputComponents(input);
     for string in components {
-        for functionString in functionInputs {
-            if string.containsString(functionString) {
-                return true;
-            }
+        if validFunctionStringFromString(string) != nil {
+            return true;
         }
     }
     return false;
+}
+
+private func validFunctionStringFromString(inputSubString: String) -> String? {
+    for functionString in functionInputs {
+        if inputSubString.containsString(functionString) {
+            return functionString;
+        }
+    }
+    return nil;
+}
+
+func functionInInputMatchesNewFunction(input: String, newFunction: String) -> Bool {
+    if hasFunctionInInput(input) {
+        let components = inputComponents(input);
+        for string in components {
+            let inputFunctionString = validFunctionStringFromString(string);
+            if inputFunctionString != nil {
+                if !inputFunctionString!.containsString(newFunction) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    } else {
+        return true;
+    }
 }
 
 func hasFactorialInInput(input: String) -> Bool {

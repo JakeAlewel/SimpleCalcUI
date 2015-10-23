@@ -10,14 +10,13 @@ import UIKit
 
 class ViewController: UIViewController {
     
-
-    
     @IBOutlet weak var mainTextView: UITextView!;
     var shouldClearOnNextTap : Bool = false;
     
     // Update Text View
     
     func appendNumberString(stringToAppend: String) {
+        clearTextIfNeeded();
         let newText = "\(mainTextView.text!)\(stringToAppend)";
         mainTextView.text = newText;
     }
@@ -27,9 +26,21 @@ class ViewController: UIViewController {
         mainTextView.text = newText;
     }
     
+    func clearTextIfNeeded() {
+        if shouldClearOnNextTap {
+            mainTextView.text = "";
+            shouldClearOnNextTap = false;
+        }
+    }
+    
     // IBAction
     
     @IBAction func touchedNumberButton(sender: UIButton) {
+        let currentString = mainTextView.text;
+        if hasFactorialInInput(currentString) {
+            return;
+        }
+        
         appendNumberString(sender.titleLabel!.text!);
     }
     
@@ -38,12 +49,21 @@ class ViewController: UIViewController {
         if hasOperatorInInput(currentString) || hasFunctionInInput(currentString) {
             return;
         }
+        
         appendOperationString(sender.titleLabel!.text!);
     }
     
     
     @IBAction func touchedFunctionButton(sender: UIButton) {
-        appendOperationString(sender.titleLabel!.text!);
+        let currentString = mainTextView.text;
+        if hasOperatorInInput(currentString) {
+            return;
+        }
+        
+        let newFunctionString = sender.titleLabel!.text!;
+        if functionInInputMatchesNewFunction(currentString, newFunction: newFunctionString) {
+            appendOperationString(newFunctionString);
+        }
     }
     
     
@@ -52,11 +72,8 @@ class ViewController: UIViewController {
         let result = solveEquation(currentString);
         appendOperationString(sender.titleLabel!.text!);
         appendNumberString(result);
+        shouldClearOnNextTap = true;
     }
-    
-    // Business Logic
-    
-    
-    
+
 }
 
