@@ -16,9 +16,11 @@ func solveEquation(input: String) -> String {
         return computeFactorial(components[0]);
     } else if hasFunctionInComponents(components) {
         return computeFunction(components);
+    } else if hasOperatorInComponents(components) {
+        return computeOperator(components);
+    } else {
+        return "ERROR";
     }
-    print(components);
-    return "Huuzahhh"
 }
 
 // Business Logic - Private
@@ -91,6 +93,31 @@ private func sumFromNumberArray(numbers: [Double]) -> Double {
         sum += number;
     }
     return sum;
+}
+
+private func computeOperator(components: [String]) -> String {
+    if components.count == 3 {
+        let operatorString = components[1];
+        let firstValue = convert(components[0]);
+        let secondValue = convert(components[2]);
+        if firstValue != nil && secondValue != nil {
+        switch operatorString {
+            case "+":
+                return "\(firstValue! + secondValue!)";
+            case "-":
+                return "\(firstValue! - secondValue!)";
+            case "*":
+                return "\(firstValue! * secondValue!)";
+            case "/":
+                return "\(firstValue! / secondValue!)";
+            case "%":
+                return "\(firstValue! % secondValue!)";
+            default:
+                return "ERROR";
+            }
+        }
+    }
+    return "ERROR";
 }
 
 // Validation - Public
