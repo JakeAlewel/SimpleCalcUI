@@ -206,6 +206,9 @@
                                 <state key="normal" title="Avg">
                                     <color key="titleColor" red="0.80000001190000003" green="0.40000000600000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="touchedFunctionButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Shi-Z4-yUv"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="id5-6F-0Er">
                                 <rect key="frame" x="285" y="546" width="75" height="75"/>
